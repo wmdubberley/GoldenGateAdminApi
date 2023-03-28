@@ -1,6 +1,6 @@
 import ggapi as gg
 '''
-This example will get a list ofextracts and replicats and ppost the stat and current stats to console
+This example will get a list of extracts and replicats and ppost the stat and current stats to console
 '''
 for extract in gg.list_extracts()['response']['items']:
     extract_name = extract['name']

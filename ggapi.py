@@ -85,7 +85,6 @@ def get_replicat_status(replicat_name):
     response.raise_for_status()
     return response.json()
 
-# Function to retrieve details of a replicat
 def get_replicat_details(replicat_name):
     url = f"{base_url}/replicats/{replicat_name}"
     response = requests.get(url, auth=(username, password), headers={"Content-Type": "application/json", "Accept": "application/json"})

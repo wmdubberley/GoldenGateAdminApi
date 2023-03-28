@@ -20,8 +20,12 @@ The functions defined in the script are:
 * view_replicat_report_file(): sends a request to retrieve the report file of a replication process with the given process name, and writes it to a local file with a filename that includes the current date.
 
 To use the script, you will need to create a "config.yml" file with your authentication credentials and the base URL of the system's API. Then, you can import the script into your Python program and call the functions as needed, passing the appropriate process names as arguments.
+
+config.yml
 ~~~ yaml
 username: Username
 password: Password
 base_url: https://na###ca.deployment.goldengate.us-phoenix-1.oci.oraclecloud.com/services/v2
+~~~
 
+This example.py will get a list of extracts and replicats and post the status and current stats to console
