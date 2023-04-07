@@ -1,3 +1,6 @@
-username: GGADMIN
-password: Peloton123##
-base_url: https://naw6iekykfca.deployment.goldengate.us-phoenix-1.oci.oraclecloud.com/services/v2
+deployments:
+  - deployment: oracle_prod
+    username: 'GGADMIN'
+    password: 'XXXXXXX'
+    baseURL: 'https://nxxxxxxxxxxxx.deployment.goldengate.us-phoenix-1.oci.oraclecloud.com/services/v2'
+
