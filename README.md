@@ -1,31 +1,80 @@
-This is a Python script that interacts with a system that runs data replication and extraction processes. It uses the requests library to send HTTP requests to the system's API endpoints and retrieve information about the status and details of the processes.
+# GoldenGate API CLI
 
-The script first imports the required libraries: requests, yaml, and datetime. The yaml library is used to load a configuration file called "config.yml", which contains authentication credentials and the base URL of the system's API.
+The GoldenGate API CLI is a command-line interface for interacting with the GoldenGate REST API. It allows users to start/stop extracts and replicats, list extracts/replicats, and get their status and details. The CLI also provides options to view the extract/replicat report files and monitor the deployment.
+Installation
 
-The script then defines several functions that correspond to actions that can be performed on the system's processes. The functions take a process name as an argument and use the requests library to send an HTTP request to the appropriate API endpoint with the necessary data and authentication credentials. The response is then returned in JSON format.
+## To use the GoldenGate API CLI, follow these steps:
 
-The functions defined in the script are:
+### Clone the repository:
 
-* start_extract(): sends a request to start an extraction process with the given process name.
-* stop_extract(): sends a request to stop an extraction process with the given process name.
-* start_replicat(): sends a request to start a replication process with the given process name.
-* stop_replicat(): sends a request to stop a replication process with the given process name.
-* list_extracts(): sends a request to retrieve a list of all extraction processes.
-* list_replicats(): sends a request to retrieve a list of all replication processes.
-* get_extract_status(): sends a request to retrieve the status of an extraction process with the given process name.
-* get_extract_details(): sends a request to retrieve details about an extraction process with the given process name.
-* get_replicat_status(): sends a request to retrieve the status of a replication process with the given process name.
-* get_replicat_details(): sends a request to retrieve details about a replication process with the * given process name.
-* view_extract_report_file(): sends a request to retrieve the report file of an extraction process with the given process name, and writes it to a local file with a filename that includes the current date.
-* view_replicat_report_file(): sends a request to retrieve the report file of a replication process with the given process name, and writes it to a local file with a filename that includes the current date.
+~~~bash
 
-To use the script, you will need to create a "config.yml" file with your authentication credentials and the base URL of the system's API. Then, you can import the script into your Python program and call the functions as needed, passing the appropriate process names as arguments.
+git clone https://github.com/wmdubberley/GoldenGateAdminApi.git
 
-config.yml
-~~~ yaml
-username: Username
-password: Password
-base_url: https://na###ca.deployment.goldengate.us-phoenix-1.oci.oraclecloud.com/services/v2
 ~~~
 
-This example.py will get a list of extracts and replicats and post the status and current stats to console
+### Install the required Python packages:
+
+~~~bash
+pip install -r requirements.txt
+~~~
+
+### Configuration
+
+Before using the CLI, you need to create a configuration file in YAML format. The configuration file should contain the following fields:
+
+    deployments: a list of deployments with their names, base URL, username, and password.
+
+#### Example configuration file:
+
+~~~yaml
+
+deployments:
+  - deployment: my-deployment
+    baseURL: https://example.com/goldengate
+    username: my-username
+    password: my-password
+~~~
+Save the configuration file as config.yml in the same directory as the ggapi.py script.
+Usage
+
+
+## To use the CLI, run the following command:
+
+~~~shell
+python ggapi.py [-h] -d DEPLOYMENT [-e EXTRACT_NAME] [-r REPLICAT_NAME] [--Monitor-Deployment]
+                      [--start-extract] [--stop-extract] [--start-replicat] [--stop-replicat]
+                      [--list-extracts] [--list-replicats] [--extract-status] [--extract-details]
+                      [--replicat-status] [--replicat-details] [--view-extract-report]
+                      [--view-replicat-report]
+~~~
+Arguments:
+
+    -h, --help: show the help message and exit.
+    -d DEPLOYMENT, --deployment DEPLOYMENT: name of the deployment (required).
+    -e EXTRACT_NAME, --extract_name EXTRACT_NAME: name of the extract process.
+    -r REPLICAT_NAME, --replicat_name REPLICAT_NAME: name of the replicat process.
+    --Monitor-Deployment: start monitoring the deployment.
+    --start-extract: start an extract process.
+    --stop-extract: stop an extract process.
+    --start-replicat: start a replicat process.
+    --stop-replicat: stop a replicat process.
+    --list-extracts: list all extract processes.
+    --list-replicats: list all replicat processes.
+    --extract-status: get the status of an extract process.
+    --extract-details: get the details of an extract process.
+    --replicat-status: get the status of a replicat process.
+    --replicat-details: get the details of a replicat process.
+    --view-extract-report: view the extract report file.
+    --view-replicat-report: view the replicat report file.
+
+## Example usage:
+
+~~~bash
+
+python ggapi.py -d my-deployment --start-extract -e my-extract
+
+~~~
+
+This command starts the my-extract process in the my-deployment deployment.
+n.
