@@ -1,9 +1,17 @@
 from ggapi import GoldengateRestApiHelper
 import argparse
 import yaml
+import logging.config
+import logging
+
+with open("conf/logging.yaml",  "r") as f:
+    yaml_config = yaml.safe_load(f.read())
+    logging.config.dictConfig(yaml_config)
+
+log = logging.getLogger(__name__) 
 
 def get_deployment_config(deployment_name):
-    with open('config.yml', 'r') as f:
+    with open('./conf/config.yml', 'r') as f:
         config = yaml.safe_load(f)
         for deployment in config['deployments']:
             if deployment['deployment'] == deployment_name:
@@ -39,29 +47,43 @@ def main():
 
 
     if args.start_extract:
-        messages=ggr.start_extract(args.extract_name)['messages']
-        for mess in messages:
-            print(mess['title'])
+        messages=ggr.start_extract(args.extract_name)
+        log.debug(messages)
+        for mess in messages['messages']:
+            log.info(mess['title'])
     elif args.stop_extract:
-        messages=ggr.stop_extract(args.extract_name)['messages']
-        for mess in messages:
-            print(mess['title'])
+        messages=ggr.stop_extract(args.extract_name)
+        log.debug(messages)
+        for mess in messages['messages']:
+            log.info(mess['title'])
     elif args.start_replicat:
         messages=ggr.start_replicat(args.replicat_name)
+        log.debug(messages)
+        for mess in messages['messages']:
+            log.info(mess['title'])
     elif args.stop_replicat:
         messages=ggr.stop_replicat(args.replicat_name)
+        log.debug(messages)
+        for mess in messages['messages']:
+            log.info(mess['title'])
     elif args.list_extracts:
         messages=ggr.list_extracts()
+        log.debug(messages)
     elif args.list_replicats:
         messages=ggr.list_replicats()
+        log.debug(messages)
     elif args.extract_status:
         messages=ggr.get_extract_status(args.extract_name)
+        log.debug(messages)
     elif args.extract_details:
         messages=ggr.get_extract_details(args.extract_name)
+        log.debug(messages)
     elif args.replicat_status:
         messages=ggr.get_replicat_status(args.replicat_name)
+        log.debug(messages)
     elif args.replicat_details:
         messages=ggr.get_replicat_details(args.replicat_name)
+        log.debug(messages)
     elif args.view_extract_report:
         ggr.view_extract_report_file(args.extract_name)
     elif args.view_replicat_report:

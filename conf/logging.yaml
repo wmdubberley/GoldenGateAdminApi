@@ -1,0 +1,39 @@
+version: 1
+disable_existing_loggers: no
+formatters:
+    simple:
+        format: "%(levelname)s: - %(message)s"
+    verbose:
+        format: "%(asctime)s - %(name)s - %(levelname)s - %(funcName)s:%(lineno)d - %(message)s"    
+handlers:
+    console:
+        class: logging.StreamHandler
+        level: INFO
+        formatter: simple
+        stream: ext://sys.stdout
+    file:
+        class: logging.handlers.TimedRotatingFileHandler
+        level: DEBUG
+        formatter: verbose
+        backupCount: 20
+        encoding: utf8
+        when: D
+        filename: ./logs/application.log
+    apperror:
+        class: logging.handlers.TimedRotatingFileHandler
+        level: ERROR
+        formatter: verbose
+        backupCount: 20
+        encoding: utf8
+        when: D
+        filename: ./logs/apperror.log
+loggers:
+    urllib3:
+        level: ERROR
+        handlers: [file]
+        propagate: no
+        qualname: [urllib3]
+    root:
+        level: DEBUG
+        handlers: [console,apperror,file]
+ 

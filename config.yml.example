@@ -1,6 +1,0 @@
-deployments:
-  - deployment: oracle_prod
-    username: 'GGADMIN'
-    password: 'XXXXXXX'
-    baseURL: 'https://nxxxxxxxxxxxx.deployment.goldengate.us-phoenix-1.oci.oraclecloud.com/services/v2'
-

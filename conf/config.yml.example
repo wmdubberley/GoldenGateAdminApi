@@ -1,0 +1,6 @@
+deployments:
+  - deployment: oracle_prod
+    username: 'GGADMIN'
+    password: 'XXXXXXX'
+    baseURL: 
+

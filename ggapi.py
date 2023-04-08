@@ -3,6 +3,9 @@ import datetime
 from tabulate import tabulate
 from requests.auth import HTTPBasicAuth
 from typing import List, Dict
+import logging
+
+log = logging.getLogger(__name__)
 
 class GoldengateRestApiHelper():
     """
