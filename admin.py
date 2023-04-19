@@ -1,14 +1,22 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
 from ggapi import GoldengateRestApiHelper
 import argparse
 import yaml
 import logging.config
 import logging
+import io , sys
+sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
+sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
 
 with open("conf/logging.yaml",  "r") as f:
     yaml_config = yaml.safe_load(f.read())
     logging.config.dictConfig(yaml_config)
 
 log = logging.getLogger(__name__) 
+handler = logging.StreamHandler()
+log.addHandler(handler)
+log.setLevel(logging.DEBUG)
 
 def get_deployment_config(deployment_name):
     with open('./conf/config.yml', 'r') as f:
@@ -43,7 +51,7 @@ def main():
         print(f'Deployment "{args.deployment}" not found in config')
         return
 
-    ggr = GoldengateRestApiHelper(deployment_config['baseURL'], deployment_config['username'],deployment_config['password']) 
+    ggr = GoldengateRestApiHelper(deployment_config['baseURL'],deployment_config['metricsURL'], deployment_config['username'],deployment_config['password']) 
 
 
     if args.start_extract:
