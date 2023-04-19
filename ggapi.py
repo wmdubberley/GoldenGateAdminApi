@@ -1,10 +1,16 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
 import requests
 import datetime
 from tabulate import tabulate
 from requests.auth import HTTPBasicAuth
 from typing import List, Dict
 import logging
+import io , sys
+sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
+sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
 
+logging.getLogger().setLevel(logging.INFO)
 log = logging.getLogger(__name__)
 
 class GoldengateRestApiHelper():
@@ -12,16 +18,18 @@ class GoldengateRestApiHelper():
     A class for interacting with the GoldenGate API.
     """
  
-    def __init__(self, base_url: str, username: str, password: str) -> None:
+    def __init__(self, base_url: str, metrics_url: str,username: str, password: str) -> None:
         """
         Initializes a new instance of the GoldenGateAPI class.
 
         Args:
             base_url (str): The base URL of the GoldenGate API.
+            metrics_url (str): The metrics URL of the GoldenGate API.
             username (str): The username to use for authentication.
             password (str): The password to use for authentication.
         """
         self.base_url = base_url
+        self.metrics_url = metrics_url
         self.auth = HTTPBasicAuth(username, password)
 
     def start_extract(self, extract_name: str) -> Dict:
@@ -181,7 +189,7 @@ class GoldengateRestApiHelper():
         current_date = now.strftime("%Y-%m-%d")
         with open(f"{extract_name}-{current_date}.rpt", "w") as f:
             for i in response.json()['response']['lines']:
-                f.write(i)
+                f.write(str(i).encode("utf-8").decode("latin1") + '\n')
 
     # Function to view replicat report file
     def view_replicat_report_file(self, replicat_name: str) -> None:
@@ -201,7 +209,7 @@ class GoldengateRestApiHelper():
         current_date = now.strftime("%Y-%m-%d")
         with open(f"{replicat_name}-{current_date}.rpt", "w") as f:
             for i in response.json()['response']['lines']:
-                f.write(i)
+                f.write(str(i).encode("utf-8").decode("latin1") )
                 f.write("\n")
             # f.writelines(extract_report_file)
         f.close()
@@ -229,7 +237,10 @@ class GoldengateRestApiHelper():
         if typeOf == 'replicats':
             staticType='statisticsReplicat' 
         extract_status = requests.get(f'{self.base_url}/{typeOf}/\{extract_Name}/info/status',auth = self.auth).json()['response']
-        extract_stats = requests.get(f'{self.base_url}/mpoints/\{extract_Name}/{staticType}',auth = self.auth).json()['response']
+        if 'response' in requests.get(f'{self.metrics_url}/mpoints/{extract_Name}/{staticType}',auth = self.auth).json():
+            extract_stats = requests.get(f'{self.metrics_url}/mpoints/{extract_Name}/{staticType}',auth = self.auth).json()['response']
+        else:
+            extract_stats = {'mappedTotalInserts': 0,'mappedTotalUpdates': 0,'mappedTotalDeletes': 0}
         return [typeOf,extract_Name,extract_status['status'],extract_status['lastStarted'],extract_status['lag'],extract_stats["mappedTotalInserts"],extract_stats["mappedTotalUpdates"],extract_stats["mappedTotalDeletes"]]
 
     def getAllNames(self, typeOf: str) -> List[str]:
@@ -259,6 +270,6 @@ class GoldengateRestApiHelper():
                 name=item['name']
                 ggTable.append(self.getStatus(p,name))
 
-        print(tabulate(ggTable, headers='firstrow', tablefmt='fancy_grid'))
+        print((tabulate(ggTable, headers='firstrow', tablefmt='fancy_grid')))
 
 
