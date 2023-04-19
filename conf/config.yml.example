@@ -1,7 +1,7 @@
 deployments:
-  - deployment: 'ogg193_deploy'
-    username: 'ggadmin'
-    password: 'oracle'
-    baseURL: 'http://10.32.80.101:8001/services/v2'
-    metricsURL: 'http://10.32.80.101:8004/services/v2'
+  - deployment: oracle_prod
+    username: 'GGADMIN'
+    password: 'XXXXXXX'
+    baseURL: 'xx'
+    metricsURL: 'xx'
 
